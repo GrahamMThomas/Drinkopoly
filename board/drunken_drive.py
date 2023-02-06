@@ -15,6 +15,6 @@ class DrunkenDrive(BoardSpace):
 
     def Land(self, gm: GameManager, player: Player):
         super().Land(gm, player)
-        loser = random.choice(self.players)
+        loser = random.choice(gm.players)
         loser.Drink(self.penalty)
         return

@@ -11,6 +11,7 @@ class BoardSpace:
         self.name = name
 
     def Land(self, gm: GameManager, player: Player) -> None:
+        print(f"{player.name} landed on {self.name}")
         pass
 
     def Visit(self, gm: GameManager, player: Player) -> None:

@@ -14,9 +14,9 @@ class WaterFall(BoardSpace):
 
     def Land(self, gm: GameManager, player: Player):
         super().Land(gm, player)
-        player_index = self.players.index(player)
+        player_index = gm.players.index(player)
         waterfall_amount = self.penalty
-        for i in range(0, len(self.players)):
-            self.players[(player_index + i) % len(self.players)].Drink(waterfall_amount)
+        for i in range(0, len(gm.players)):
+            gm.players[(player_index + i) % len(gm.players)].Drink(waterfall_amount)
             waterfall_amount += self.penalty
         return

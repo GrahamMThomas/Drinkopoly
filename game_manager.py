@@ -10,9 +10,14 @@ class GameManager:
         self.players = players
         self.board = board
 
-    def DoRound(self):
-        print("\n##### Round Start! #####")
+    def DoRound(self, i):
+        print(f"\n##### Round {i} Start! #####")
+
         for player in self.players:
+            if player.has_lost:
+                print(f"{player.name} has lost.")
+                continue
+
             if player.in_jail:
                 print(f"{player.name} is in the DRUNK TANK!")
                 continue
