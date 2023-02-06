@@ -7,14 +7,13 @@ if TYPE_CHECKING:
 from board.board_space import BoardSpace
 
 
-class Jail(BoardSpace):
+class GoSpace(BoardSpace):
     def __init__(self, name: str):
         super().__init__(name)
 
     def Visit(self, gm: GameManager, player: Player) -> None:
         super().Visit(gm, player)
-        for incarcerated_player in gm.players:
-            if incarcerated_player.in_jail:
-                print(f"{incarcerated_player.name} is no longer in Jail!")
-                incarcerated_player.in_jail = False
+        if player.is_question_master:
+            print(f"{player.name} is no longer Question Master.")
+            player.is_question_master = False
         return

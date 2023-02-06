@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from board.board_space import BoardSpace
 from board.drunken_drive import DrunkenDrive
 from board.go_to_jail import GoToJail
@@ -18,21 +18,21 @@ class GameBoard:
     def add_player_to_board(self, player: Player):
         self.player_positions[player.name] = 0
 
-    def move_player(self, num_of_spaces: int, player: Player) -> Property:
-        self.player_positions[player.name] = (
-            self.player_positions[player.name] + num_of_spaces
-        ) % len(self.properties)
+    def move_player(self, num_of_spaces: int, player: Player) -> List[Property]:
+        visited = []
+        for x in range(0, num_of_spaces):
+            visited.append(self.move_by_1(player))
+        return visited
+
+    def move_by_1(self, player: Player) -> Property:
+        self.player_positions[player.name] = (self.player_positions[player.name] + 1) % len(self.properties)
         return self.properties[self.player_positions[player.name]]
 
     def teleport_player(self, property_name: str, player: Player) -> None:
-        self.player_positions[player.name] = self.get_property_location_by_name(
-            property_name
-        )
+        self.player_positions[player.name] = self.get_property_location_by_name(property_name)
 
     def get_property_location_by_name(self, property_name):
-        board_index = [
-            i for i, v in enumerate(self.properties) if v.name == property_name
-        ]
+        board_index = [i for i, v in enumerate(self.properties) if v.name == property_name]
         if len(board_index) == 0:
             raise Exception(f"Could not find property of name {property_name}")
         return board_index

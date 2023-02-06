@@ -11,6 +11,8 @@ class Player:
         self.total_oz_drank = 0
         self.in_jail = False
         self.is_question_master = False
+        self.times_in_jail = 0
+        self.times_question_master = 0
 
     def Roll(self) -> int:
         roll_outcome = self.roller.Roll()
@@ -27,6 +29,7 @@ class Player:
     def BuyProperty(self, the_property: Property) -> None:
         print(f"{self.name} buys {the_property.name}")
         self.Drink(the_property.GetRentCost())
+        the_property.owner = self
 
     def OwnsProperty(self, the_property: Property) -> bool:
         return the_property in self.owned_properties

@@ -1,0 +1,1 @@
+- No Question Master questions relating to game rules
