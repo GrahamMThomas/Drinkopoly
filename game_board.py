@@ -1,6 +1,13 @@
 from typing import Dict
+from board.board_space import BoardSpace
+from board.drunken_drive import DrunkenDrive
+from board.go_to_jail import GoToJail
+from board.jail import Jail
+from board.question_master import QuestionMaster
+from board.water_fall import WaterFall
 from models.player import Player
 from board.property import Property
+from models.setColors import SetColors
 
 
 class GameBoard:
@@ -17,45 +24,58 @@ class GameBoard:
         ) % len(self.properties)
         return self.properties[self.player_positions[player.name]]
 
+    def teleport_player(self, property_name: str, player: Player) -> None:
+        self.player_positions[player.name] = self.get_property_location_by_name(
+            property_name
+        )
+
+    def get_property_location_by_name(self, property_name):
+        board_index = [
+            i for i, v in enumerate(self.properties) if v.name == property_name
+        ]
+        if len(board_index) == 0:
+            raise Exception(f"Could not find property of name {property_name}")
+        return board_index
+
     def get_properties(self):
         return [
-            Property("Go", 0),
-            Property("Mediterranean Avenue", 60),
-            Property("Community Chest", 0),  # Keg theme
-            Property("Baltic Avenue", 60),
-            Property("Income Tax", 0),
-            Property("Reading Railroad", 200),
-            Property("Oriental Avenue", 100),
-            Property("Chance", 0),
-            Property("Vermouth Avenue", 100),
-            Property("Cabernet Avenue", 120),
-            Property("Drunk Tank", 0),
-            Property("St. Charles Place", 140),
-            Property("Electric Company", 150),
-            Property("States Avenue", 140),
-            Property("Virginia Avenue", 160),
-            Property("Pennslyvania Railroad", 200),
-            Property("St. James Place", 180),
-            Property("Community Chest", 0),
-            Property("Hennessy Avenue", 180),
-            Property("New York Avenue", 200),
-            Property("Free Parking", 0),  # Kings Cup
-            Property("Kentucky Avenue", 230),
-            Property("Chance", 230),
-            Property("Indiana Avenue", 230),
-            Property("Illinois Avenue", 230),
-            Property("B. & O. Railroad", 200),
-            Property("Atlantic Avenue", 260),
-            Property("Ventnor Avenue", 260),
-            Property("Water Works", 150),  # Water Fall
-            Property("Go To Jail", 0),
-            Property("Pacific Avenue", 300),
-            Property("North Carolina Avenue", 300),
-            Property("Community Chest", 0),
-            Property("Pennsylvania Avenue", 320),
-            Property("Short Line", 200),  # Short Bus
-            Property("Chance", 0),
-            Property("Park Place", 320),
-            Property("Luxury Tax", 0),
-            Property("Boardwalk", 400),
+            BoardSpace("Go"),
+            Property("Mediterranean Avenue", 60, SetColors.BROWN),
+            DrunkenDrive("Drunken Drive", 1),  # Keg theme
+            Property("Baltic Avenue", 60, SetColors.BROWN),
+            QuestionMaster("Question Master"),
+            Property("Whiskey Express", 200, SetColors.BLACK),
+            Property("Oriental Avenue", 100, SetColors.LIGHTBLUE),
+            BoardSpace("Chance"),
+            Property("Vermouth Avenue", 100, SetColors.LIGHTBLUE),
+            Property("Cabernet Avenue", 120, SetColors.LIGHTBLUE),
+            Jail("Drunk Tank"),
+            Property("St. Charles Place", 140, SetColors.PURPLE),
+            Property("Electric Company", 150, SetColors.GRAY),
+            Property("States Avenue", 140, SetColors.PURPLE),
+            Property("Virginia Avenue", 160, SetColors.PURPLE),
+            Property("Salty Spitoon", 200, SetColors.BLACK),
+            Property("Patron Place", 180, SetColors.ORANGE),
+            BoardSpace("Community Chest"),
+            Property("Hennessy Avenue", 180, SetColors.ORANGE),
+            Property("New York Avenue", 200, SetColors.ORANGE),
+            BoardSpace("Free Parking"),  # Kings Cup
+            Property("Kentucky Avenue", 230, SetColors.RED),
+            BoardSpace("Chance"),
+            Property("Indiana Avenue", 230, SetColors.RED),
+            Property("Illinois Avenue", 230, SetColors.RED),
+            Property("B. & O. Railroad", 200, SetColors.BLACK),
+            Property("Atlantic Avenue", 260, SetColors.YELLOW),
+            Property("Ventnor Avenue", 260, SetColors.YELLOW),
+            WaterFall("Water Fall", 0.25),
+            GoToJail("Go To Jail"),
+            Property("Pacific Avenue", 300, SetColors.GREEN),
+            Property("North Carolina Avenue", 300, SetColors.GREEN),
+            BoardSpace("Community Chest"),
+            Property("Prosecco Avenue", 320, SetColors.GREEN),
+            Property("Short Bus Booze", 200, SetColors.BLACK),
+            BoardSpace("Chance"),
+            Property("Park Place", 320, SetColors.BLUE),
+            BoardSpace("Luxury Tax"),
+            Property("Boardwalk", 400, SetColors.BLUE),
         ]

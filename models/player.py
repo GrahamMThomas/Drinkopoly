@@ -9,6 +9,8 @@ class Player:
         self.roller = Roller2d6()
         self.owned_properties: List[Property] = []
         self.total_oz_drank = 0
+        self.in_jail = False
+        self.is_question_master = False
 
     def Roll(self) -> int:
         roll_outcome = self.roller.Roll()
