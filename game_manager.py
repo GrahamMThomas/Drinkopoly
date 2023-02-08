@@ -21,7 +21,6 @@ class GameManager:
             if player.in_jail:
                 print(f"{player.name} is in the DRUNK TANK!")
                 continue
-                # TODO: Bail out mechanic
 
             if player.is_question_master:
                 loser = random.choice(self.players)

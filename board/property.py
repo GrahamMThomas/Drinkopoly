@@ -9,10 +9,13 @@ from models.setColors import SetColors
 
 
 class Property(BoardSpace):
+    MAX_HOUSE_COUNT: int = 3
+
     def __init__(self, name: str, purchase_cost: int, color: SetColors):
         super().__init__(name)
         self.purchase_cost = purchase_cost
         self.house_count = 0
+        self.house_cost = 0.5
         self.color_code = color
         self.owner: Player = None
 
@@ -33,3 +36,10 @@ class Property(BoardSpace):
             if decision:
                 player.BuyProperty(self)
         return
+
+    def BuyHouse(self) -> bool:
+        if self.house_count >= self.MAX_HOUSE_COUNT:
+            return False
+        self.owner.Drink(self.house_cost)
+        self.house_count += 1
+        return True
