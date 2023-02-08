@@ -1,3 +1,4 @@
+import random
 from typing import List
 from board.property import Property
 from rollers.roller2d6 import Roller2d6
@@ -34,10 +35,27 @@ class Player:
     def DecideToBuy(self, the_property: Property) -> bool:
         return True
 
+    def BuyHousesIfDesired(self) -> bool:
+        for the_property in self.owned_properties:
+            if not self.OwnsPropertySet(the_property):
+                continue
+            if random.randint(0, 4) == 0:
+                the_property.BuyHouse(1)
+
     def BuyProperty(self, the_property: Property) -> None:
         print(f"{self.name} buys {the_property.name}")
         self.Drink(the_property.GetRentCost())
+        self.owned_properties.append(the_property)
         the_property.owner = self
 
     def OwnsProperty(self, the_property: Property) -> bool:
         return the_property in self.owned_properties
+
+    def OwnsPropertySet(self, the_property: Property):
+        return the_property.set_property_count == sum(
+            [
+                1
+                for x in self.owned_properties
+                if x.color_code == the_property.color_code
+            ]
+        )

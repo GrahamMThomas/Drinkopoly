@@ -18,6 +18,7 @@ class Property(BoardSpace):
         self.house_cost = 0.5
         self.color_code = color
         self.owner: Player = None
+        self.set_property_count = 1
 
     def GetRentCost(self) -> int:
         return self.purchase_cost
@@ -37,9 +38,10 @@ class Property(BoardSpace):
                 player.BuyProperty(self)
         return
 
-    def BuyHouse(self) -> bool:
-        if self.house_count >= self.MAX_HOUSE_COUNT:
+    def BuyHouses(self, purchase_count=1) -> bool:
+        if self.house_count + purchase_count > self.MAX_HOUSE_COUNT:
             return False
-        self.owner.Drink(self.house_cost)
-        self.house_count += 1
+        self.owner.Drink(self.house_cost * purchase_count)
+        self.house_count += purchase_count
+        print(f"{self.owner} purchased {purchase_count} houses")
         return True

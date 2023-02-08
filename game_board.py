@@ -25,20 +25,26 @@ class GameBoard:
         return visited
 
     def move_by_1(self, player: Player) -> Property:
-        self.player_positions[player.name] = (self.player_positions[player.name] + 1) % len(self.properties)
+        self.player_positions[player.name] = (
+            self.player_positions[player.name] + 1
+        ) % len(self.properties)
         return self.properties[self.player_positions[player.name]]
 
     def teleport_player(self, property_name: str, player: Player) -> None:
-        self.player_positions[player.name] = self.get_property_location_by_name(property_name)
+        self.player_positions[player.name] = self.get_property_location_by_name(
+            property_name
+        )
 
     def get_property_location_by_name(self, property_name):
-        board_index = [i for i, v in enumerate(self.properties) if v.name == property_name]
+        board_index = [
+            i for i, v in enumerate(self.properties) if v.name == property_name
+        ]
         if len(board_index) == 0:
             raise Exception(f"Could not find property of name {property_name}")
         return board_index[0]
 
     def get_properties(self):
-        return [
+        properties = [
             BoardSpace("Go"),
             Property("Mediterranean Avenue", 1, SetColors.BROWN),
             DrunkenDrive("Drunken Drive", 1),  # Keg theme
@@ -80,3 +86,15 @@ class GameBoard:
             BoardSpace("Luxury Tax"),
             Property("Boardwalk", 8, SetColors.BLUE),
         ]
+
+        for the_property in properties:
+            if isinstance(the_property, Property):
+                the_property.set_property_count = sum(
+                    [
+                        1
+                        for x in properties
+                        if isinstance(x, Property)
+                        and x.color_code == the_property.color_code
+                    ]
+                )
+        return properties

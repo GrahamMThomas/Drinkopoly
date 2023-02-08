@@ -28,6 +28,8 @@ class GameManager:
                     print(f"{loser.name} answered {player.name}'s question")
                     loser.Drink(QuestionMaster.penalty)
 
+            player.BuyHousesIfDesired()
+
             roll_outcome = player.Roll()
             visited_spaces = self.board.move_player(roll_outcome, player)
 
