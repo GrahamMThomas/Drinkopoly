@@ -23,7 +23,7 @@ def Main():
     player_loss_reasons = defaultdict(lambda: [])
 
     game_count = 1000
-    game_count = 1
+    # game_count = 1
     if game_count == 1:
         logger.setLevel(logging.DEBUG)
 

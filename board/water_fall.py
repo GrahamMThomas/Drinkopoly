@@ -13,8 +13,14 @@ class WaterFall(BoardSpace):
         self.penalty: float = penalty
 
     def Land(self, gm: GameManager, player: Player):
+        # Weird bug no clue why it's happening
+        if player.has_lost:
+            return
         super().Land(gm, player)
         players = [x for x in gm.players if not x.has_lost]
+        # print([(x.name, x.has_lost) for x in gm.players])
+        # print([x.name for x in players])
+        # print(player.name)
         player_index = players.index(player)
         waterfall_amount = self.penalty
         for i in range(0, len(players)):

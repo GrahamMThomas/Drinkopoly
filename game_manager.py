@@ -20,17 +20,18 @@ class GameManager:
         self.logger.debug(f"\n##### Round {i} Start! #####")
 
         for player in self.players:
+            if player.has_lost:
+                continue
             self.logger.debug(f"{player.name}:")
             self.logger.debug(f"\t{player.drink_tokens} drink tokens.")
             self.logger.debug(f"\t{player.alcohol_remaining:.2f} alcohol left.")
+            self.logger.debug(
+                f"\t{player.total_oz_drank:.2f} of {player.drinking_capacity:.2f} drinking capacity."
+            )
             self.logger.debug(f"\t{len(player.owned_properties)} properties.")
             self.logger.debug(
                 f"\t{sum([x.house_count for x in player.owned_properties])} houses."
             )
-            if player.has_lost:
-                self.logger.debug(f"{player.name} has lost.")
-                self.logger.debug("---")
-                continue
 
             if player.in_jail:
                 self.logger.debug(f"{player.name} is in the DRUNK TANK!")
