@@ -15,6 +15,11 @@ class Jail(BoardSpace):
         super().Visit(gm, player)
         for incarcerated_player in gm.players:
             if incarcerated_player.in_jail:
-                self.logger.debug(f"{incarcerated_player.name} is no longer in Jail!")
-                incarcerated_player.in_jail = False
+                incarcerated_player.SetFree()
+        return
+
+    def Land(self, gm: GameManager, player: Player) -> None:
+        super().Land(gm, player)
+        if player.drink_tokens > 0:
+            player.YoinkDrinkTokens(1)
         return

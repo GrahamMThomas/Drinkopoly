@@ -14,7 +14,7 @@ class GoSpace(BoardSpace):
     def Visit(self, gm: GameManager, player: Player) -> None:
         super().Visit(gm, player)
         self.logger.debug(f"{player.name} passed Go!")
-        player.EarnDrinkTokens(1)
+        player.EarnDrinkTokens(2)
         if player.is_question_master:
             self.logger.debug(f"{player.name} is no longer Question Master.")
             player.is_question_master = False
@@ -22,5 +22,5 @@ class GoSpace(BoardSpace):
 
     def Land(self, gm: GameManager, player: Player) -> None:
         super().Land(gm, player)
-        player.EarnDrinkTokens(2)
+        player.EarnDrinkTokens(2)  # Extra two because we also visit go
         return

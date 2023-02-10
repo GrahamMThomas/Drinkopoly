@@ -16,6 +16,7 @@ class KingsCup:
         self.logger.debug(f"{player.name} poured {pour_amount:.2f} into Kings Cup")
         self.alcohol_amount += pour_amount
         player.alcohol_remaining -= min(pour_amount, player.alcohol_remaining)
+        player.CheckIfLost()
 
     def Empty(self, player: Player):
         self.logger.debug(
