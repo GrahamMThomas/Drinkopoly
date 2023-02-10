@@ -15,6 +15,6 @@ class Jail(BoardSpace):
         super().Visit(gm, player)
         for incarcerated_player in gm.players:
             if incarcerated_player.in_jail:
-                print(f"{incarcerated_player.name} is no longer in Jail!")
+                self.logger.debug(f"{incarcerated_player.name} is no longer in Jail!")
                 incarcerated_player.in_jail = False
         return

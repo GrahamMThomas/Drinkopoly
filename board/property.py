@@ -37,11 +37,3 @@ class Property(BoardSpace):
             if decision:
                 player.BuyProperty(self)
         return
-
-    def BuyHouses(self, purchase_count=1) -> bool:
-        if self.house_count + purchase_count > self.MAX_HOUSE_COUNT:
-            return False
-        self.owner.Drink(self.house_cost * purchase_count)
-        self.house_count += purchase_count
-        print(f"{self.owner} purchased {purchase_count} houses")
-        return True

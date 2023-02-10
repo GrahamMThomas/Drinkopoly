@@ -14,6 +14,6 @@ class GoSpace(BoardSpace):
     def Visit(self, gm: GameManager, player: Player) -> None:
         super().Visit(gm, player)
         if player.is_question_master:
-            print(f"{player.name} is no longer Question Master.")
+            self.logger.debug(f"{player.name} is no longer Question Master.")
             player.is_question_master = False
         return

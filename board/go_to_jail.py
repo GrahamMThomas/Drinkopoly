@@ -13,6 +13,7 @@ class GoToJail(BoardSpace):
 
     def Land(self, gm: GameManager, player: Player):
         super().Land(gm, player)
-        gm.board.teleport_player("Go To Jail", player)
+        gm.board.teleport_player("Drunk Tank", player)
+        player.in_jail = True
         player.times_in_jail += 1
         return
