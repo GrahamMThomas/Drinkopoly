@@ -20,13 +20,19 @@ def Main():
     player_jails = defaultdict(lambda: [])
     player_win_counts = defaultdict(lambda: 0)
 
-    game_count = 100
+    game_count = 500
     if game_count == 1:
         logger.setLevel(logging.DEBUG)
 
     for i in range(game_count):
-        players = [Player("Alfred"), Player("Bob"), Player("Cooper"), Player("Doofus")]
+        players = [
+            Player("Pansy", 12, True),
+            Player("SmallBoi", 18, True),
+            Player("Larry", 24, False),
+            Player("Anthony", 36, False),
+        ]
         board = GameBoard()
+
         for player in players:
             board.add_player_to_board(player)
         gm = GameManager(players, board)

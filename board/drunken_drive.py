@@ -17,4 +17,7 @@ class DrunkenDrive(BoardSpace):
         super().Land(gm, player)
         loser = random.choice(gm.players)
         loser.Drink(self.penalty)
+        winners = filter(lambda x: x != loser, gm.players)
+        for player in winners:
+            player.EarnDrinkTokens(1)
         return

@@ -7,7 +7,12 @@ import logging
 
 
 class Player:
-    def __init__(self, name: str) -> None:
+    DRINK_TOKEN_CONVERSION_RATE = 2  # oz
+    DRINK_TOKENS_PER_BEER = 4
+
+    def __init__(
+        self, name: str, drinking_capacity: int, converts_drink_tokens: bool
+    ) -> None:
         self.logger = logging.getLogger("Drinkopoly")
         self.name = name
         self.roller = Roller2d6()
@@ -17,7 +22,10 @@ class Player:
         self.is_question_master = False
         self.times_in_jail = 0
         self.times_question_master = 0
-        self.drinking_capacity = 48  # oz
+        self.converts_drink_tokens = converts_drink_tokens
+        self.drink_tokens = 0
+        self.alcohol_remaining = 12
+        self.drinking_capacity = drinking_capacity  # oz
         self.has_lost = False
 
     def Roll(self) -> int:
@@ -27,13 +35,47 @@ class Player:
 
     def Drink(self, ounces: float) -> None:
         self.logger.debug(f"{self.name} drank {ounces:.2f} oz")
+
+        while (
+            self.converts_drink_tokens
+            and ounces > self.DRINK_TOKEN_CONVERSION_RATE
+            and self.drink_tokens > 0
+        ):
+            ounces -= self.DRINK_TOKEN_CONVERSION_RATE
+            self.drink_tokens -= 1
+
+        while (
+            not self.converts_drink_tokens
+            and self.alcohol_remaining < ounces
+            and self.drink_tokens > 0
+            and self.drink_tokens < self.DRINK_TOKENS_PER_BEER
+        ):
+            ounces -= self.DRINK_TOKEN_CONVERSION_RATE
+            self.drink_tokens -= 1
+
+        if (
+            self.alcohol_remaining < ounces
+            and self.drink_tokens >= self.DRINK_TOKENS_PER_BEER
+        ):
+            self.GrabABeer()
+
         self.total_oz_drank += ounces
-        if self.total_oz_drank > self.drinking_capacity:
+        self.alcohol_remaining -= ounces
+        if self.total_oz_drank > self.drinking_capacity or self.alcohol_remaining < 0:
             self.Lose()
 
     def Lose(self):
         self.logger.debug(f"{self.name} has Lost and is out of the game!")
         self.has_lost = True
+
+    def EarnDrinkTokens(self, drink_token_amount_to_add):
+        self.drink_tokens += drink_token_amount_to_add
+
+    def GrabABeer(self) -> bool:
+        if self.drink_tokens < self.DRINK_TOKENS_PER_BEER:
+            return False
+        self.drink_tokens -= self.DRINK_TOKENS_PER_BEER
+        self.alcohol_remaining += 12
 
     def DecideToBuy(self, the_property: Property) -> bool:
         return True
