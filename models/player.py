@@ -23,7 +23,7 @@ class Player:
         return roll_outcome
 
     def Drink(self, ounces: float) -> None:
-        print(f"{self.name} drank {ounces} oz")
+        print(f"{self.name} drank {ounces:.2f} oz")
         self.total_oz_drank += ounces
         if self.total_oz_drank > self.drinking_capacity:
             self.Lose()
@@ -40,7 +40,7 @@ class Player:
             if not self.OwnsPropertySet(the_property):
                 continue
             if random.randint(0, 4) == 0:
-                the_property.BuyHouse(1)
+                the_property.BuyHouses(1)
 
     def BuyProperty(self, the_property: Property) -> None:
         print(f"{self.name} buys {the_property.name}")

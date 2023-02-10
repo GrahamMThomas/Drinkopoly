@@ -13,14 +13,20 @@ def Main():
     round_number = 1
     while True:
         gm.DoRound(round_number)
-        if sum([1 for player in players if player.has_lost]) >= len(players) - 1 or round_number > 200:
+        if (
+            sum([1 for player in players if player.has_lost]) >= len(players) - 1
+            or round_number > 200
+        ):
             print("\n\nGame over!")
             print("Stats -------------------------")
             print(f"Rounds played: {round_number}")
+            print(
+                f"Time Spent: {round_number*2//60} Hours and {round_number*2 % 60} Minutes"
+            )
 
             for player in players:
                 print(f"{player.name}:")
-                print(f"\tAlcohol Drank: {player.total_oz_drank}")
+                print(f"\tAlcohol Drank: {player.total_oz_drank:.2f}")
                 print(f"\tArrests: {player.times_in_jail}")
                 print(f"\tQuestion Master: {player.times_question_master}")
             break

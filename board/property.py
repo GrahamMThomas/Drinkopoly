@@ -21,7 +21,7 @@ class Property(BoardSpace):
         self.set_property_count = 1
 
     def GetRentCost(self) -> int:
-        return self.purchase_cost
+        return (self.purchase_cost * 0.2) * (self.house_count + 1)
 
     def IsOwned(self):
         return self.owner is not None
