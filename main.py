@@ -1,6 +1,7 @@
 import sys
 from game_board import GameBoard
 from game_manager import GameManager
+from models.lostReasons import LostReasons
 from models.player import Player
 from collections import defaultdict
 import statistics
@@ -19,8 +20,10 @@ def Main():
     player_question_masters = defaultdict(lambda: [])
     player_jails = defaultdict(lambda: [])
     player_win_counts = defaultdict(lambda: 0)
+    player_loss_reasons = defaultdict(lambda: [])
 
-    game_count = 500
+    game_count = 1000
+    # game_count = 1
     if game_count == 1:
         logger.setLevel(logging.DEBUG)
 
@@ -67,6 +70,8 @@ def Main():
             player_jails[player.name].append(player.times_in_jail)
             if not player.has_lost:
                 player_win_counts[player.name] += 1
+            else:
+                player_loss_reasons[player.name].append(player.lost_reason)
 
     if game_count == 1:
         return
@@ -81,6 +86,13 @@ def Main():
         print(f"Avg QMs: {statistics.mean(player_question_masters[player.name]):.2f}")
         print(f"Avg Jails: {statistics.mean(player_jails[player.name]):.2f}")
         print(f"Wins: {player_win_counts[player.name]}")
+        print("Losses: ")
+        print(
+            f"\tTapped Out: {sum([1 for x in player_loss_reasons[player.name] if x == LostReasons.TappedOut])}"
+        )
+        print(
+            f"\tOut Of Beer: {sum([1 for x in player_loss_reasons[player.name] if x == LostReasons.OutOfBeer])}"
+        )
 
 
 if __name__ == "__main__":

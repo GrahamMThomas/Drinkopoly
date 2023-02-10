@@ -1,7 +1,9 @@
 from typing import Dict, List
 from board.board_space import BoardSpace
+from board.community_keg_space import CommunityKegSpace
 from board.drunken_drive import DrunkenDrive
 from board.free_parking import FreeParking
+from board.go_space import GoSpace
 from board.go_to_jail import GoToJail
 from board.jail import Jail
 from board.question_master import QuestionMaster
@@ -46,43 +48,40 @@ class GameBoard:
 
     def get_properties(self):
         properties = [
-            BoardSpace("Go"),
+            GoSpace("Go"),
             Property("Mediterranean Avenue", 1, SetColors.BROWN),
             DrunkenDrive("Drunken Drive", 1),
             Property("Bacardi Avenue", 1.25, SetColors.BROWN),
+            CommunityKegSpace("Kommunity Keg"),
+            Property("Whiskey Express", 2.50, SetColors.SINGLE),
+            Property("Vermouth Avenue", 1.5, SetColors.LIGHTBLUE),
             QuestionMaster("Question Master"),
-            Property("Whiskey Express", 3, SetColors.SINGLE),
-            Property("Vermouth Avenue", 2, SetColors.LIGHTBLUE),
-            Property("Cabernet Avenue", 2.5, SetColors.LIGHTBLUE),
+            Property("Cabernet Avenue", 1.75, SetColors.LIGHTBLUE),
             Jail("Drunk Tank"),
             # Property("St. Charles Place", 2.5, SetColors.PURPLE),
             Property("Electric Company", 1.5, SetColors.GRAY),
-            Property("States Avenue", 2.5, SetColors.PURPLE),
-            Property("Virginia Avenue", 3, SetColors.PURPLE),
-            Property("Salty Spitoon", 3, SetColors.SINGLE),
-            Property("Patron Place", 3, SetColors.ORANGE),
-            BoardSpace("Kommunity Keg"),
-            Property("Hennessy Avenue", 3, SetColors.ORANGE),
-            # Property("New York Avenue", 3.5, SetColors.ORANGE),
-            FreeParking("Free Parking"),  # Kings Cup
-            Property("Kentucky Avenue", 4, SetColors.RED),
-            BoardSpace("Chance"),
-            # Property("Indiana Avenue", 4, SetColors.RED),
-            Property("Illinois Avenue", 4.5, SetColors.RED),
-            Property("B. & O. Railroad", 3, SetColors.SINGLE),
-            # Property("Atlantic Avenue", 5, SetColors.YELLOW),
-            Property("Ventnor Avenue", 5, SetColors.YELLOW),
-            Property("Marvin Gardens", 5.5, SetColors.YELLOW),
+            Property("States Avenue", 2, SetColors.PURPLE),
+            Property("Virginia Avenue", 2.25, SetColors.PURPLE),
+            Property("Salty Spitoon", 2.5, SetColors.SINGLE),
+            Property("Patron Place", 2.5, SetColors.ORANGE),
+            CommunityKegSpace("Kommunity Keg"),
+            Property("Hennessy Avenue", 2.5, SetColors.ORANGE),
+            FreeParking("Free Parking"),
+            Property("Kentucky Avenue", 2.75, SetColors.RED),
+            Property("Illinois Avenue", 3, SetColors.RED),
+            Property("B. & O. Railroad", 2.5, SetColors.SINGLE),
+            Property("Ventnor Avenue", 3.25, SetColors.YELLOW),
+            Property("Marvin Gardens", 3.25, SetColors.YELLOW),
             WaterFall("Water Fall", 0.25),
             GoToJail("Go To Jail"),
-            Property("Pacifico Avenue", 6, SetColors.GREEN),
-            Property("North Carolina Avenue", 6, SetColors.GREEN),
-            BoardSpace("Kommunity Keg"),
-            Property("Prosecco Avenue", 6.5, SetColors.GREEN),
-            Property("Short Line", 4, SetColors.SINGLE),
-            Property("Prohibition Place", 7, SetColors.BLUE),
+            Property("Pacifico Avenue", 3.5, SetColors.GREEN),
+            Property("North Carolina Avenue", 3.5, SetColors.GREEN),
+            CommunityKegSpace("Kommunity Keg"),
+            Property("Prosecco Avenue", 3.5, SetColors.GREEN),
+            Property("Short Line", 2.5, SetColors.SINGLE),
+            Property("Prohibition Place", 3.75, SetColors.BLUE),
             BoardSpace("Luxury Tax"),
-            Property("Boardwalk", 8, SetColors.BLUE),
+            Property("Boardwalk", 4, SetColors.BLUE),
         ]
 
         for the_property in properties:

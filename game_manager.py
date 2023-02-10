@@ -2,6 +2,7 @@ import random
 from typing import List
 from board.question_master import QuestionMaster
 from game_board import GameBoard
+from keg_deck import KegDeck
 from mechanics.kings_cup import KingsCup
 from models.player import Player
 import logging
@@ -13,11 +14,13 @@ class GameManager:
         self.board = board
         self.logger = logging.getLogger("Drinkopoly")
         self.kings_cup = KingsCup()
+        self.keg_deck = KegDeck()
 
     def DoRound(self, i):
         self.logger.debug(f"\n##### Round {i} Start! #####")
 
         for player in self.players:
+            self.logger.debug(f"{player.name} has {player.drink_tokens} drink tokens.")
             if player.has_lost:
                 self.logger.debug(f"{player.name} has lost.")
                 self.logger.debug("---")
