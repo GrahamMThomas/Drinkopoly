@@ -1,6 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from board.board_space import BoardSpace
+    from board.property import Property
+    from game_board import GameBoard
+
+import board
 import random
 from typing import List
-from board.property import Property
 from models.lostReasons import LostReasons
 from models.setColors import SetColors
 from rollers.roller2d6 import Roller2d6
@@ -109,13 +117,39 @@ class Player:
             self.drink_tokens * self.DRINK_TOKEN_CONVERSION_RATE
         )
 
-    def DecideToBuy(self, the_property: Property) -> bool:
-        # Purchase if you have 4 oz of backup alcohol
+    def DecideToBuy(self, the_property: Property, log=True) -> bool:
+        # Purchase if you have safety_net_amount of backup alcohol
         buying_power = self.get_buying_power()
         if buying_power - the_property.purchase_cost > self.safety_net_amount:
             return True
-        self.logger.debug(f"{self.name} is too broke!")
+        if log:
+            self.logger.debug(f"{self.name} is too broke!")
         return False
+
+    def DecideWhereToWarp(self, game_board: GameBoard) -> BoardSpace:
+        for owned_prop in self.owned_properties:
+            if self.OwnsPropertySet(owned_prop):
+                continue
+            else:
+                other_props = game_board.get_properties_set_color(owned_prop.color_code)
+                for other_prop in other_props:
+                    if not self.OwnsProperty(other_prop) and self.DecideToBuy(
+                        other_prop
+                    ):
+                        return other_prop
+
+        badSpaceTypes = [
+            board.go_space.GoSpace,
+            board.jail.Jail,
+            board.free_parking.FreeParking,
+            board.go_to_jail.GoToJail,
+            board.luxury_tax.LuxuryTax,
+        ]
+        leftoverSpaces = [
+            x for x in game_board.board_spaces if type(x) not in badSpaceTypes
+        ]
+
+        return game_board.get_board_space_by_name(random.choice(leftoverSpaces).name)
 
     def BuyHousesIfDesired(self) -> bool:
         buying_power = self.get_buying_power()

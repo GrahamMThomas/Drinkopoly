@@ -24,7 +24,7 @@ def Main():
     player_loss_reasons = defaultdict(lambda: [])
     player_loss_round_counts = defaultdict(lambda: [])
 
-    game_count = 1000
+    game_count = 5000
     # game_count = 1
     if game_count == 1:
         logger.setLevel(logging.DEBUG)
@@ -49,6 +49,10 @@ def Main():
                 sum([1 for player in players if player.has_lost]) >= len(players) - 1
                 or round_number > 200
             ):
+                for player in players:
+                    if player.has_lost and player.lost_round == 0:
+                        player.lost_round = round_number
+
                 if game_count != 1:
                     break
                 print("\n\nGame over!")
@@ -65,8 +69,6 @@ def Main():
                     print(f"\tQuestion Master: {player.times_question_master}")
                     print(f"\tTurns in Jail: {player.total_turns_in_jail}")
                     if player.has_lost:
-                        if player.lost_round == 0:
-                            player.lost_round = round_number
                         print(f"\tLoss Turn: {player.lost_round}")
                 break
             round_number += 1
@@ -97,7 +99,7 @@ def Main():
         print(
             f"Avg Turns in Jail: {statistics.mean(player_turns_in_jail[player.name]):.2f}"
         )
-        print(f"Wins: {player_win_counts[player.name]}")
+        print(f"Win %: {(player_win_counts[player.name]/game_count)*100:.1f} %")
         print("Losses: ")
         print(
             f"\tTapped Out: {sum([1 for x in player_loss_reasons[player.name] if x == LostReasons.TappedOut])}"

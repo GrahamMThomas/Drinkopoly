@@ -17,7 +17,7 @@ class Property(BoardSpace):
         self.logger = logging.getLogger("Drinkopoly")
         self.purchase_cost = purchase_cost
         self.house_count = 0
-        self.house_cost = 0.5
+        self.house_cost = 1.5
         self.color_code = color
         self.owner: Player = None
         self.set_property_count = 1
