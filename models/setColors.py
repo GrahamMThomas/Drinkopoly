@@ -11,4 +11,3 @@ class SetColors(Enum):
     YELLOW = 7
     GREEN = 8
     BLUE = 9
-    GRAY = 10

@@ -22,5 +22,6 @@ class KingsCup:
         self.logger.debug(
             f"{player.name} drank the Kings Cup ({self.alcohol_amount} oz)!"
         )
-        player.drinking_capacity -= self.alcohol_amount
+        player.total_oz_drank += self.alcohol_amount
+        player.CheckIfLost()
         self.alcohol_amount = 0

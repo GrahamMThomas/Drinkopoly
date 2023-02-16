@@ -19,8 +19,10 @@ def Main():
     player_drink_amounts = defaultdict(lambda: [])
     player_question_masters = defaultdict(lambda: [])
     player_jails = defaultdict(lambda: [])
+    player_turns_in_jail = defaultdict(lambda: [])
     player_win_counts = defaultdict(lambda: 0)
     player_loss_reasons = defaultdict(lambda: [])
+    player_loss_round_counts = defaultdict(lambda: [])
 
     game_count = 1000
     # game_count = 1
@@ -30,9 +32,9 @@ def Main():
     for i in range(game_count):
         players = [
             Player("Pansy", 12, True),
-            Player("SmallBoi", 18, True),
-            Player("Larry", 24, False),
-            Player("Anthony", 36, False),
+            Player("SmallBoi", 24, True),
+            Player("Larry", 36, False),
+            Player("Anthony", 60, False),
         ]
         board = GameBoard()
 
@@ -61,6 +63,11 @@ def Main():
                     print(f"\tAlcohol Drank: {player.total_oz_drank:.2f}")
                     print(f"\tArrests: {player.times_in_jail}")
                     print(f"\tQuestion Master: {player.times_question_master}")
+                    print(f"\tTurns in Jail: {player.total_turns_in_jail}")
+                    if player.has_lost:
+                        if player.lost_round == 0:
+                            player.lost_round = round_number
+                        print(f"\tLoss Turn: {player.lost_round}")
                 break
             round_number += 1
         round_numbers.append(round_number)
@@ -68,10 +75,12 @@ def Main():
             player_drink_amounts[player.name].append(player.total_oz_drank)
             player_question_masters[player.name].append(player.times_question_master)
             player_jails[player.name].append(player.times_in_jail)
+            player_turns_in_jail[player.name].append(player.total_turns_in_jail)
             if not player.has_lost:
                 player_win_counts[player.name] += 1
             else:
                 player_loss_reasons[player.name].append(player.lost_reason)
+                player_loss_round_counts[player.name].append(player.lost_round)
 
     if game_count == 1:
         return
@@ -85,6 +94,9 @@ def Main():
         print(f"Std Drank: {statistics.stdev(player_drink_amounts[player.name]):.2f}")
         print(f"Avg QMs: {statistics.mean(player_question_masters[player.name]):.2f}")
         print(f"Avg Jails: {statistics.mean(player_jails[player.name]):.2f}")
+        print(
+            f"Avg Turns in Jail: {statistics.mean(player_turns_in_jail[player.name]):.2f}"
+        )
         print(f"Wins: {player_win_counts[player.name]}")
         print("Losses: ")
         print(
@@ -92,6 +104,9 @@ def Main():
         )
         print(
             f"\tOut Of Beer: {sum([1 for x in player_loss_reasons[player.name] if x == LostReasons.OutOfBeer])}"
+        )
+        print(
+            f"Avg Loss Round: {statistics.mean(player_loss_round_counts[player.name]):.2f}"
         )
 
 

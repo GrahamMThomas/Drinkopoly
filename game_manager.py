@@ -21,6 +21,9 @@ class GameManager:
 
         for player in self.players:
             if player.has_lost:
+                # If we haven't set lost round, assume they lost last round.
+                if player.lost_round == 0:
+                    player.lost_round = i - 1
                 continue
             self.logger.debug(f"{player.name}:")
             self.logger.debug(f"\t{player.drink_tokens} drink tokens.")
@@ -39,6 +42,7 @@ class GameManager:
                     player.SetFree()
                 else:
                     player.turns_in_jail += 1
+                    player.total_turns_in_jail += 1
                     self.logger.debug("---")
                     continue
 

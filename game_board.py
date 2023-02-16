@@ -59,7 +59,7 @@ class GameBoard:
             Property("Cabernet Avenue", 1.75, SetColors.LIGHTBLUE),
             Jail("Drunk Tank"),
             # Property("St. Charles Place", 2.5, SetColors.PURPLE),
-            Property("Electric Company", 1.5, SetColors.GRAY),
+            Property("Electric Company", 1.5, SetColors.SINGLE),
             Property("States Avenue", 2, SetColors.PURPLE),
             Property("Virginia Avenue", 2.25, SetColors.PURPLE),
             Property("Salty Spitoon", 2.5, SetColors.SINGLE),

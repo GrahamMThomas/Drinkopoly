@@ -23,14 +23,16 @@ class Player:
         self.is_question_master = False
         self.times_in_jail = 0
         self.turns_in_jail = 0
+        self.total_turns_in_jail = 0
         self.times_question_master = 0
         self.converts_drink_tokens = converts_drink_tokens
         self.drink_tokens = 0
         self.alcohol_remaining = 12
         self.drinking_capacity = drinking_capacity  # oz
         self.has_lost = False
+        self.lost_round = 0
         self.lost_reason: LostReasons = None
-        self.safety_net_amount = 3
+        self.safety_net_amount = 2.5
 
     def Roll(self) -> int:
         roll_outcome = self.roller.Roll()
@@ -56,20 +58,26 @@ class Player:
         ):
             self.GrabABeer()
 
-        while self.alcohol_remaining < ounces and self.drink_tokens > 0:
+        while (
+            self.alcohol_remaining < ounces
+            or (
+                self.total_oz_drank + ounces >= self.drinking_capacity
+                and self.total_oz_drank < self.drinking_capacity
+            )
+        ) and self.drink_tokens > 0:
             self.logger.debug(f"{self.name} redeemed a drink token (Forced)")
             ounces -= min(self.DRINK_TOKEN_CONVERSION_RATE, ounces)
             self.drink_tokens -= 1
 
-        self.total_oz_drank += ounces
-        self.alcohol_remaining -= ounces
+        self.total_oz_drank = min(self.total_oz_drank + ounces, self.drinking_capacity)
+        self.alcohol_remaining = max(self.alcohol_remaining - ounces, 0)
 
         self.CheckIfLost()
 
     def CheckIfLost(self):
-        if self.total_oz_drank > self.drinking_capacity:
+        if self.total_oz_drank >= self.drinking_capacity and self.drink_tokens == 0:
             self.Lose(LostReasons.TappedOut)
-        elif self.alcohol_remaining < 0:
+        elif self.alcohol_remaining <= 0 and self.drink_tokens == 0:
             self.Lose(LostReasons.OutOfBeer)
 
     def Lose(self, lost_reason: LostReasons):
