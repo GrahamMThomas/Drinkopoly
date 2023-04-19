@@ -6,6 +6,7 @@ from models.player import Player
 from collections import defaultdict
 import statistics
 import logging
+from matplotlib import pyplot as plt
 
 
 def Main():
@@ -90,6 +91,9 @@ def Main():
     print(f"After {game_count} games:")
     print(f"Round Count Avg: {statistics.mean(round_numbers):.2f}")
     print(f"Round Count Std: {statistics.stdev(round_numbers):.2f}")
+
+    plt.hist(round_numbers, 50)
+    plt.show()
     for player in players:
         print(f"\n{player.name}")
         print(f"Avg Drank: {statistics.mean(player_drink_amounts[player.name]):.2f}")

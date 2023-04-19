@@ -74,7 +74,6 @@ class GameBoard:
             QuestionMaster("Question Master"),
             Property("Cabernet Avenue", 1.75, SetColors.LIGHTBLUE),
             Jail("Drunk Tank"),
-            # Property("St. Charles Place", 2.5, SetColors.PURPLE),
             Property("Electric Company", 1.5, SetColors.SINGLE),
             Property("States Avenue", 2, SetColors.PURPLE),
             Property("Virginia Avenue", 2.25, SetColors.PURPLE),
@@ -89,7 +88,7 @@ class GameBoard:
             BlackedOut("Blacked Out"),
             Property("Ventnor Avenue", 3.25, SetColors.YELLOW),
             Property("Marvin Gardens", 3.25, SetColors.YELLOW),
-            WaterFall("Water Fall", 0.25),
+            WaterFall("Water Fall", 0.25),  # Potentially take out
             GoToJail("Go To Jail"),
             Property("Pacifico Avenue", 3.5, SetColors.GREEN),
             Property("North Carolina Avenue", 3.5, SetColors.GREEN),
