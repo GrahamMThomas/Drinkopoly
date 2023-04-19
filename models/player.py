@@ -118,10 +118,10 @@ class Player:
     def get_buying_power(self) -> float:
         return self.alcohol_remaining + (self.drink_tokens * self.DRINK_TOKEN_CONVERSION_RATE)
 
-    def DecideToBuy(self, the_property: Property, log=True) -> bool:
+    def DecideToBuy(self, the_property: Property, log=True, extra_padding=0.0) -> bool:
         # Purchase if you have safety_net_amount of backup alcohol
         buying_power = self.get_buying_power()
-        if buying_power - the_property.purchase_cost > self.safety_net_amount:
+        if buying_power - the_property.purchase_cost - extra_padding > self.safety_net_amount:
             return True
         if log:
             self.logger.debug(f"{self.name} is too broke!")
@@ -147,6 +147,19 @@ class Player:
         leftoverSpaces = [x for x in game_board.board_spaces if type(x) not in badSpaceTypes]
 
         return game_board.get_board_space_by_name(random.choice(leftoverSpaces).name)
+
+    def DecideWhichPropToSquat(self, game_board: GameBoard) -> Property:
+        for owned_prop in self.owned_properties:
+            if self.OwnsPropertySet(owned_prop):
+                continue
+            else:
+                other_props = game_board.get_properties_set_color(owned_prop.color_code)
+                owned_prop_count = sum([1 for x in other_props if self.OwnsProperty(x)])
+                if owned_prop_count + 1 == len(other_props):
+                    squatter_target_prop = [x for x in other_props if not self.OwnsProperty(x)][0]
+                    if squatter_target_prop.IsOwned():
+                        return squatter_target_prop
+        return None
 
     def BuyHousesIfDesired(self) -> bool:
         buying_power = self.get_buying_power()

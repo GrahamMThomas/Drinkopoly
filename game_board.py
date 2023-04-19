@@ -10,6 +10,7 @@ from board.go_to_jail import GoToJail
 from board.jail import Jail
 from board.luxury_tax import LuxuryTax
 from board.question_master import QuestionMaster
+from board.squatters_rights import SquattersRights
 from board.water_fall import WaterFall
 from models.player import Player
 from board.property import Property
@@ -31,20 +32,14 @@ class GameBoard:
         return visited
 
     def move_by_1(self, player: Player) -> Property:
-        self.player_positions[player.name] = (
-            self.player_positions[player.name] + 1
-        ) % len(self.board_spaces)
+        self.player_positions[player.name] = (self.player_positions[player.name] + 1) % len(self.board_spaces)
         return self.board_spaces[self.player_positions[player.name]]
 
     def teleport_player(self, board_space_name: str, player: Player) -> None:
-        self.player_positions[player.name] = self.get_board_space_index_by_name(
-            board_space_name
-        )
+        self.player_positions[player.name] = self.get_board_space_index_by_name(board_space_name)
 
     def get_board_space_index_by_name(self, board_space_name):
-        board_index = [
-            i for i, v in enumerate(self.board_spaces) if v.name == board_space_name
-        ]
+        board_index = [i for i, v in enumerate(self.board_spaces) if v.name == board_space_name]
         if len(board_index) == 0:
             raise Exception(f"Could not find property of name {board_space_name}")
         return board_index[0]
@@ -56,11 +51,7 @@ class GameBoard:
         return board_spaces[0]
 
     def get_properties_set_color(self, color: SetColors):
-        return [
-            x
-            for x in self.board_spaces
-            if isinstance(x, Property) and x.color_code == color
-        ]
+        return [x for x in self.board_spaces if isinstance(x, Property) and x.color_code == color]
 
     def get_properties(self) -> List[BoardSpace]:
         properties = [
@@ -76,6 +67,7 @@ class GameBoard:
             Jail("Drunk Tank"),
             Property("Electric Company", 1.5, SetColors.SINGLE),
             Property("States Avenue", 2, SetColors.PURPLE),
+            SquattersRights("Squatter's Rights"),
             Property("Virginia Avenue", 2.25, SetColors.PURPLE),
             Property("Salty Spitoon", 2.5, SetColors.SINGLE),
             Property("Patron Place", 2.5, SetColors.ORANGE),
@@ -106,8 +98,7 @@ class GameBoard:
                     [
                         1
                         for x in properties
-                        if isinstance(x, Property)
-                        and x.color_code == the_property.color_code
+                        if isinstance(x, Property) and x.color_code == the_property.color_code
                     ]
                 )
         return properties

@@ -51,7 +51,7 @@ def Main():
                     if player.has_lost and player.lost_round == 0:
                         player.lost_round = round_number
 
-                should_print_stats = False  # round_number > 90
+                should_print_stats = False  # round_number > 50
 
                 if game_count != 1 and not should_print_stats:
                     break
