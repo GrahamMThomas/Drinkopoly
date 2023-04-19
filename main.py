@@ -25,7 +25,7 @@ def Main():
     player_loss_reasons = defaultdict(lambda: [])
     player_loss_round_counts = defaultdict(lambda: [])
 
-    game_count = 5000
+    game_count = 2000
     # game_count = 1
     if game_count == 1:
         logger.setLevel(logging.DEBUG)
@@ -46,22 +46,19 @@ def Main():
         round_number = 1
         while True:
             gm.DoRound(round_number)
-            if (
-                sum([1 for player in players if player.has_lost]) >= len(players) - 1
-                or round_number > 200
-            ):
+            if sum([1 for player in players if player.has_lost]) >= len(players) - 1 or round_number > 200:
                 for player in players:
                     if player.has_lost and player.lost_round == 0:
                         player.lost_round = round_number
 
-                if game_count != 1:
+                should_print_stats = False  # round_number > 90
+
+                if game_count != 1 and not should_print_stats:
                     break
                 print("\n\nGame over!")
                 print("Stats -------------------------")
                 print(f"Rounds played: {round_number}")
-                print(
-                    f"Time Spent: {round_number*2//60} Hours and {round_number*2 % 60} Minutes"
-                )
+                print(f"Time Spent: {round_number*2//60} Hours and {round_number*2 % 60} Minutes")
 
                 for player in players:
                     print(f"{player.name}:")
@@ -71,6 +68,7 @@ def Main():
                     print(f"\tTurns in Jail: {player.total_turns_in_jail}")
                     if player.has_lost:
                         print(f"\tLoss Turn: {player.lost_round}")
+                # exit(0)
                 break
             round_number += 1
         round_numbers.append(round_number)
@@ -92,7 +90,7 @@ def Main():
     print(f"Round Count Avg: {statistics.mean(round_numbers):.2f}")
     print(f"Round Count Std: {statistics.stdev(round_numbers):.2f}")
 
-    plt.hist(round_numbers, 50)
+    plt.hist(round_numbers, 25)
     plt.show()
     for player in players:
         print(f"\n{player.name}")
@@ -100,9 +98,7 @@ def Main():
         print(f"Std Drank: {statistics.stdev(player_drink_amounts[player.name]):.2f}")
         print(f"Avg QMs: {statistics.mean(player_question_masters[player.name]):.2f}")
         print(f"Avg Jails: {statistics.mean(player_jails[player.name]):.2f}")
-        print(
-            f"Avg Turns in Jail: {statistics.mean(player_turns_in_jail[player.name]):.2f}"
-        )
+        print(f"Avg Turns in Jail: {statistics.mean(player_turns_in_jail[player.name]):.2f}")
         print(f"Win %: {(player_win_counts[player.name]/game_count)*100:.1f} %")
         print("Losses: ")
         print(
@@ -111,9 +107,7 @@ def Main():
         print(
             f"\tOut Of Beer: {sum([1 for x in player_loss_reasons[player.name] if x == LostReasons.OutOfBeer])}"
         )
-        print(
-            f"Avg Loss Round: {statistics.mean(player_loss_round_counts[player.name]):.2f}"
-        )
+        print(f"Avg Loss Round: {statistics.mean(player_loss_round_counts[player.name]):.2f}")
 
 
 if __name__ == "__main__":

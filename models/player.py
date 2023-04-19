@@ -18,10 +18,9 @@ import logging
 class Player:
     DRINK_TOKEN_CONVERSION_RATE = 2  # oz
     DRINK_TOKENS_PER_BEER = 4
+    DRINK_TOKEN_MAX = 8
 
-    def __init__(
-        self, name: str, drinking_capacity: int, converts_drink_tokens: bool
-    ) -> None:
+    def __init__(self, name: str, drinking_capacity: int, converts_drink_tokens: bool) -> None:
         self.logger = logging.getLogger("Drinkopoly")
         self.name = name
         self.roller = Roller2d6()
@@ -90,19 +89,23 @@ class Player:
 
     def Lose(self, lost_reason: LostReasons):
         self.logger.debug(f"{self.name} has Lost and is out of the game!")
+        for property in self.owned_properties:
+            property.ReleaseOwnership()
+
+        self.owned_properties = []
         self.has_lost = True
         self.lost_reason = lost_reason
 
     def EarnDrinkTokens(self, drink_token_amount_to_add: int):
-        self.logger.debug(
-            f"{self.name} gained {drink_token_amount_to_add} drink token(s)"
-        )
+        if drink_token_amount_to_add + self.drink_tokens > self.DRINK_TOKEN_MAX:
+            f"{self.name} has the maximum number of allowed drink tokens. Truncating..."
+            drink_token_amount_to_add = self.DRINK_TOKEN_MAX - self.drink_tokens
+
+        self.logger.debug(f"{self.name} gained {drink_token_amount_to_add} drink token(s)")
         self.drink_tokens += drink_token_amount_to_add
 
     def YoinkDrinkTokens(self, drink_token_amount_to_remove: int):
-        self.logger.debug(
-            f"{self.name} lost {drink_token_amount_to_remove} drink token(s)"
-        )
+        self.logger.debug(f"{self.name} lost {drink_token_amount_to_remove} drink token(s)")
         self.drink_tokens -= drink_token_amount_to_remove
 
     def GrabABeer(self) -> bool:
@@ -113,9 +116,7 @@ class Player:
         self.alcohol_remaining += 12
 
     def get_buying_power(self) -> float:
-        return self.alcohol_remaining + (
-            self.drink_tokens * self.DRINK_TOKEN_CONVERSION_RATE
-        )
+        return self.alcohol_remaining + (self.drink_tokens * self.DRINK_TOKEN_CONVERSION_RATE)
 
     def DecideToBuy(self, the_property: Property, log=True) -> bool:
         # Purchase if you have safety_net_amount of backup alcohol
@@ -133,9 +134,7 @@ class Player:
             else:
                 other_props = game_board.get_properties_set_color(owned_prop.color_code)
                 for other_prop in other_props:
-                    if not self.OwnsProperty(other_prop) and self.DecideToBuy(
-                        other_prop
-                    ):
+                    if not self.OwnsProperty(other_prop) and self.DecideToBuy(other_prop):
                         return other_prop
 
         badSpaceTypes = [
@@ -145,9 +144,7 @@ class Player:
             board.go_to_jail.GoToJail,
             board.luxury_tax.LuxuryTax,
         ]
-        leftoverSpaces = [
-            x for x in game_board.board_spaces if type(x) not in badSpaceTypes
-        ]
+        leftoverSpaces = [x for x in game_board.board_spaces if type(x) not in badSpaceTypes]
 
         return game_board.get_board_space_by_name(random.choice(leftoverSpaces).name)
 
@@ -161,8 +158,7 @@ class Player:
             purchase_count = the_property.MAX_HOUSE_COUNT - the_property.house_count
 
             while (
-                buying_power - (the_property.house_cost * purchase_count)
-                < self.safety_net_amount
+                buying_power - (the_property.house_cost * purchase_count) < self.safety_net_amount
                 and purchase_count > 0
             ):
                 purchase_count -= 1
@@ -170,9 +166,7 @@ class Player:
             if purchase_count == 0:
                 continue
 
-            self.logger.debug(
-                f"{self.name} purchased {purchase_count} houses on {the_property.name}"
-            )
+            self.logger.debug(f"{self.name} purchased {purchase_count} houses on {the_property.name}")
             self.Drink(the_property.house_cost * purchase_count)
             the_property.house_count += purchase_count
             return True
@@ -190,11 +184,7 @@ class Player:
         if the_property.color_code == SetColors.SINGLE:
             return True
         return the_property.set_property_count == sum(
-            [
-                1
-                for x in self.owned_properties
-                if x.color_code == the_property.color_code
-            ]
+            [1 for x in self.owned_properties if x.color_code == the_property.color_code]
         )
 
     def SetFree(self):
