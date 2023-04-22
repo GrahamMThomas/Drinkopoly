@@ -12,20 +12,21 @@ from models.setColors import SetColors
 class Property(BoardSpace):
     MAX_HOUSE_COUNT: int = 3
 
-    def __init__(self, name: str, purchase_cost: int, color: SetColors):
+    def __init__(self, name: str, purchase_cost: float, color: SetColors):
         super().__init__(name)
         self.logger = logging.getLogger("Drinkopoly")
         self.purchase_cost = purchase_cost
         self.house_count = 0
-        self.house_cost = 1.5
         self.color_code = color
         self.owner: Player = None
         self.set_property_count = 1
+        self.house_cost = self.DetermineHouseCost()
 
-    def GetRentCost(self) -> int:
+    def GetRentCost(self, override_house_count: int = None) -> float:
         # 1.75 Exponential -> Boardwalk 3 hours = 9oz
         exponent = 1.75 if self.color_code != SetColors.SINGLE else 1.25
-        raw_rent_cost = (self.purchase_cost * 0.2) * (self.house_count + 1) ** exponent
+        house_count_temp = self.house_count if override_house_count is None else override_house_count
+        raw_rent_cost = (self.purchase_cost * 0.2) * (house_count_temp + 1) ** exponent
         rounded_rent_cost = round(raw_rent_cost * 4) / 4
         return rounded_rent_cost
 
@@ -51,3 +52,8 @@ class Property(BoardSpace):
             if decision:
                 player.BuyProperty(self)
         return
+
+    def DetermineHouseCost(self) -> float:
+        raw_house_cost = self.purchase_cost * 0.50
+        raw_house_cost = max(raw_house_cost, 1)
+        return round(raw_house_cost * 4) / 4

@@ -102,3 +102,19 @@ class GameBoard:
                     ]
                 )
         return properties
+
+    def rent_roll_call(self) -> None:
+        for space in self.board_spaces:
+            if not isinstance(space, Property):
+                continue
+
+            # iterate 0 to Max House and get rent costs and print
+            print (f"\n{space.name} - {space.color_code.name}")
+            print (f"\tHouse Cost - {space.house_cost} oz")
+            print (f"\tRents:")
+            for i in range(0, space.MAX_HOUSE_COUNT+1):
+                rent_cost = space.GetRentCost(i)
+
+                if (space.color_code == SetColors.SINGLE):
+                    rent_cost = 1
+                print(f"\t\t{i} Houses: {rent_cost} oz")

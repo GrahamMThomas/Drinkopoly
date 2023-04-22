@@ -38,6 +38,8 @@ def Main():
             Player("Anthony", 60, False),
         ]
         board = GameBoard()
+        if i == 0:
+            board.rent_roll_call()
 
         for player in players:
             board.add_player_to_board(player)
