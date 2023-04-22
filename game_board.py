@@ -56,39 +56,39 @@ class GameBoard:
     def get_properties(self) -> List[BoardSpace]:
         properties = [
             GoSpace("Go"),
-            Property("Mediterranean Avenue", 1, SetColors.BROWN),
+            Property("Aperol Avenue", 1, SetColors.BROWN),
             DrunkenDrive("Drunken Drive", 1),
-            Property("Bacardi Avenue", 1.25, SetColors.BROWN),
+            Property("Bacardi Boulevard", 1.25, SetColors.BROWN),
             CommunityKegSpace("Community Keg 1"),
             Property("Whiskey Express", 2.50, SetColors.SINGLE),
             Property("Vermouth Avenue", 1.5, SetColors.LIGHTBLUE),
             QuestionMaster("Question Master"),
-            Property("Cabernet Avenue", 1.75, SetColors.LIGHTBLUE),
+            Property("Rose Roundabout", 1.75, SetColors.LIGHTBLUE),
             Jail("Drunk Tank"),
-            Property("Electric Company", 1.5, SetColors.SINGLE),
-            Property("States Avenue", 2, SetColors.PURPLE),
+            Property("Watering Hole", 2.5, SetColors.SINGLE),
+            Property("Curacao Circle", 2, SetColors.PURPLE),
             SquattersRights("Squatter's Rights"),
-            Property("Virginia Avenue", 2.25, SetColors.PURPLE),
+            Property("Vodka Alley", 2.25, SetColors.PURPLE),
             Property("Salty Spitoon", 2.5, SetColors.SINGLE),
             Property("Patron Place", 2.5, SetColors.ORANGE),
             CommunityKegSpace("Community Keg 2"),
             Property("Hennessy Avenue", 2.5, SetColors.ORANGE),
-            FreeParking("Free Parking"),
-            Property("Kentucky Avenue", 2.75, SetColors.RED),
-            Property("Illinois Avenue", 3, SetColors.RED),
-            Property("B. & O. Railroad", 2.5, SetColors.SINGLE),
+            FreeParking("Paid Parking"),
+            Property("Sake Street", 2.75, SetColors.RED),
+            Property("Liquor Land", 3, SetColors.RED),
+            Property("D. U I. Railroad", 2.5, SetColors.SINGLE),
             BlackedOut("Blacked Out"),
-            Property("Ventnor Avenue", 3.25, SetColors.YELLOW),
-            Property("Marvin Gardens", 3.25, SetColors.YELLOW),
+            Property("Booze Bodega", 3.25, SetColors.YELLOW),
+            Property("Marvin Beer Gardens", 3.25, SetColors.YELLOW),
             WaterFall("Water Fall", 0.25),  # Potentially take out
             GoToJail("Go To Jail"),
             Property("Pacifico Avenue", 3.5, SetColors.GREEN),
             Property("North Carolina Avenue", 3.5, SetColors.GREEN),
             CommunityKegSpace("Community Keg 3"),
             Property("Prosecco Avenue", 3.5, SetColors.GREEN),
-            Property("Short Line", 2.5, SetColors.SINGLE),
+            Property("Lads Lane", 2.5, SetColors.SINGLE),
             Property("Prohibition Place", 3.75, SetColors.BLUE),
-            LuxuryTax("Luxury Tax"),
+            LuxuryTax("Shot O'Clock"),
             Property("Boardwalk", 4, SetColors.BLUE),
         ]
 
@@ -109,12 +109,9 @@ class GameBoard:
                 continue
 
             # iterate 0 to Max House and get rent costs and print
-            print (f"\n{space.name} - {space.color_code.name}")
-            print (f"\tHouse Cost - {space.house_cost} oz")
-            print (f"\tRents:")
-            for i in range(0, space.MAX_HOUSE_COUNT+1):
+            print(f"\n{space.name} - {space.color_code.name}")
+            print(f"\tHouse Cost - {space.house_cost} oz")
+            print(f"\tRents:")
+            for i in range(0, space.MAX_HOUSE_COUNT + 1):
                 rent_cost = space.GetRentCost(i)
-
-                if (space.color_code == SetColors.SINGLE):
-                    rent_cost = 1
                 print(f"\t\t{i} Houses: {rent_cost} oz")

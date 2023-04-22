@@ -54,6 +54,8 @@ class Property(BoardSpace):
         return
 
     def DetermineHouseCost(self) -> float:
+        if self.color_code == SetColors.SINGLE:
+            return 1
         raw_house_cost = self.purchase_cost * 0.50
         raw_house_cost = max(raw_house_cost, 1)
         return round(raw_house_cost * 4) / 4

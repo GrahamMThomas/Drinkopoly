@@ -35,10 +35,12 @@ def Main():
             Player("Pansy", 12, True),
             Player("SmallBoi", 24, True),
             Player("Larry", 36, False),
+            Player("Larry2", 36, False),
+            Player("Larry3", 36, False),
             Player("Anthony", 60, False),
         ]
-        # players[0].EarnDrinkTokens(3)
-        # players[1].EarnDrinkTokens(1)
+        players[0].EarnDrinkTokens(3)
+        players[1].EarnDrinkTokens(1)
         board = GameBoard()
         if i == 0:
             board.rent_roll_call()
