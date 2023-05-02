@@ -25,6 +25,7 @@ class Property(BoardSpace):
     def GetRentCost(self, override_house_count: int = None) -> float:
         # 1.75 Exponential -> Boardwalk 3 hours = 9oz
         exponent = 1.75 if self.color_code != SetColors.SINGLE else 1.25
+        exponent = 2 if self.color_code == SetColors.GREEN else exponent
         house_count_temp = self.house_count if override_house_count is None else override_house_count
         raw_rent_cost = (self.purchase_cost * 0.2) * (house_count_temp + 1) ** exponent
         rounded_rent_cost = round(raw_rent_cost * 4) / 4
