@@ -80,11 +80,11 @@ class GameBoard:
             BlackedOut("Blacked Out"),
             Property("Booze Bodega", 3.25, SetColors.YELLOW),
             Property("Marvin Beer Gardens", 3.25, SetColors.YELLOW),
-            WaterFall("Water Fall", 0.25),  # Potentially take out
+            CommunityKegSpace("Community Keg 3"),
             GoToJail("Go To Jail"),
             Property("Pacifico Avenue", 3.5, SetColors.GREEN),
             Property("North Carolina Avenue", 3.5, SetColors.GREEN),
-            CommunityKegSpace("Community Keg 3"),
+            CommunityKegSpace("Community Keg 4"),
             Property("Prosecco Avenue", 3.5, SetColors.GREEN),
             Property("Lads Lane", 2.5, SetColors.SINGLE),
             Property("Prohibition Place", 3.75, SetColors.BLUE),

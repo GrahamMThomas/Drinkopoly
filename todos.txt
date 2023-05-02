@@ -1,4 +1,4 @@
-- Change WaterFall
+
 - Add a just visiting to the jail
 - More schenanigans, less property stuff
 - Green have higher rent exponent
