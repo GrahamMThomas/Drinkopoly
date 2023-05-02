@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from models.genders import Gender
+
 if TYPE_CHECKING:
     from board.board_space import BoardSpace
     from board.property import Property
@@ -20,7 +22,9 @@ class Player:
     DRINK_TOKENS_PER_BEER = 4
     DRINK_TOKEN_MAX = 8
 
-    def __init__(self, name: str, drinking_capacity: int, converts_drink_tokens: bool) -> None:
+    def __init__(
+        self, name: str, drinking_capacity: int, converts_drink_tokens: bool, gender: Gender
+    ) -> None:
         self.logger = logging.getLogger("Drinkopoly")
         self.name = name
         self.roller = Roller2d6()
@@ -40,6 +44,7 @@ class Player:
         self.lost_round = 0
         self.lost_reason: LostReasons = None
         self.safety_net_amount = 2.5
+        self.gender = gender
 
     def Roll(self) -> int:
         roll_outcome = self.roller.Roll()

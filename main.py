@@ -1,6 +1,7 @@
 import sys
 from game_board import GameBoard
 from game_manager import GameManager
+from models.genders import Gender
 from models.lostReasons import LostReasons
 from models.player import Player
 from collections import defaultdict
@@ -32,12 +33,11 @@ def Main():
 
     for i in range(game_count):
         players = [
-            Player("Pansy", 12, True),
-            Player("SmallBoi", 24, True),
-            Player("Larry", 36, False),
-            Player("Larry2", 36, False),
-            Player("Larry3", 36, False),
-            Player("Anthony", 60, False),
+            Player("Pansy", 12, True, Gender.Female),
+            Player("SmallBoi", 24, True, Gender.Male),
+            Player("Larry", 36, False, Gender.Male),
+            Player("Bertha", 48, False, Gender.Female),
+            Player("Anthony", 60, False, Gender.Male),
         ]
         players[0].EarnDrinkTokens(3)
         players[1].EarnDrinkTokens(1)

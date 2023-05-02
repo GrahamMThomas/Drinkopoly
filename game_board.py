@@ -12,6 +12,7 @@ from board.luxury_tax import LuxuryTax
 from board.question_master import QuestionMaster
 from board.squatters_rights import SquattersRights
 from board.water_fall import WaterFall
+from models.genders import Gender
 from models.player import Player
 from board.property import Property
 from models.setColors import SetColors
@@ -65,11 +66,11 @@ class GameBoard:
             QuestionMaster("Question Master"),
             Property("Rose Roundabout", 1.75, SetColors.LIGHTBLUE),
             Jail("Drunk Tank"),
-            Property("Watering Hole", 2.5, SetColors.SINGLE),
+            Property("Daiquiri Dicks", 2.5, SetColors.SINGLE, gender_specific=Gender.Male),
             Property("Curacao Circle", 2, SetColors.PURPLE),
             SquattersRights("Squatter's Rights"),
             Property("Vodka Alley", 2.25, SetColors.PURPLE),
-            Property("Salty Spitoon", 2.5, SetColors.SINGLE),
+            Property("Bourbon Brothel", 2.5, SetColors.SINGLE, gender_specific=Gender.Female),
             Property("Patron Place", 2.5, SetColors.ORANGE),
             CommunityKegSpace("Community Keg 2"),
             Property("Hennessy Avenue", 2.5, SetColors.ORANGE),

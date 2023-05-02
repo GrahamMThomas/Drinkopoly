@@ -2,6 +2,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from models.genders import Gender
+
 if TYPE_CHECKING:
     from game_manager import GameManager
     from models.player import Player
@@ -12,7 +14,7 @@ from models.setColors import SetColors
 class Property(BoardSpace):
     MAX_HOUSE_COUNT: int = 3
 
-    def __init__(self, name: str, purchase_cost: float, color: SetColors):
+    def __init__(self, name: str, purchase_cost: float, color: SetColors, gender_specific: Gender = None):
         super().__init__(name)
         self.logger = logging.getLogger("Drinkopoly")
         self.purchase_cost = purchase_cost
@@ -21,11 +23,14 @@ class Property(BoardSpace):
         self.owner: Player = None
         self.set_property_count = 1
         self.house_cost = self.DetermineHouseCost()
+        self.gender_specific = gender_specific
 
     def GetRentCost(self, override_house_count: int = None) -> float:
         # 1.75 Exponential -> Boardwalk 3 hours = 9oz
         exponent = 1.75 if self.color_code != SetColors.SINGLE else 1.25
         exponent = 2 if self.color_code == SetColors.GREEN else exponent
+        if self.gender_specific != None:
+            exponent *= 1.5
         house_count_temp = self.house_count if override_house_count is None else override_house_count
         raw_rent_cost = (self.purchase_cost * 0.2) * (house_count_temp + 1) ** exponent
         rounded_rent_cost = round(raw_rent_cost * 4) / 4
@@ -42,16 +47,18 @@ class Property(BoardSpace):
     def Land(self, gm: GameManager, player: Player):
         super().Land(gm, player)
         self.logger.debug(f"\tOwned by: {'nobody' if self.owner is None else self.owner.name}")
-        if self.IsOwned() and self.owner != player:
+        if self.IsOwned() and self.owner != player and self.gender_specific != player.gender:
             rentCost = self.GetRentCost()
             self.logger.debug(f"\t{self.house_count} Houses: {rentCost:.2f} oz")
             player.Drink(rentCost)
         elif self.owner == player:
             pass
-        else:
+        elif self.gender_specific == None or self.gender_specific == player.gender:
             decision = player.DecideToBuy(self)
             if decision:
                 player.BuyProperty(self)
+        else:
+            self.logger("Do nothing at property because this gender does not pay rent.")
         return
 
     def DetermineHouseCost(self) -> float:
