@@ -1,4 +1,5 @@
 from __future__ import annotations
+from random import randrange
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -15,7 +16,17 @@ class SquattersRights(BoardSpace):
         super().Land(gm, player)
         prop_to_squat = player.DecideWhichPropToSquat(gm.board)
         if prop_to_squat is None:
-            self.logger.debug(f"No property to squat.")
+            self.logger.debug(f"No property to squat. Teleporting instead")
+            railroads = [
+                gm.board.get_board_space_by_name("Whiskey Express"),
+                gm.board.get_board_space_by_name("Squatter's Rights"),
+                gm.board.get_board_space_by_name("D. U I. Railroad"),
+                gm.board.get_board_space_by_name("Lads Lane"),
+            ]
+            chosen_space = railroads[randrange(0, len(railroads) - 1)]
+            self.logger.debug(f"Teleporting to a random railroad: {chosen_space.name}")
+            gm.board.teleport_player(chosen_space.name, player)
+            chosen_space.Land(gm, player)
             return
 
         if (

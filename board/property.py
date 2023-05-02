@@ -27,10 +27,10 @@ class Property(BoardSpace):
 
     def GetRentCost(self, override_house_count: int = None) -> float:
         # 1.75 Exponential -> Boardwalk 3 hours = 9oz
-        exponent = 1.75 if self.color_code != SetColors.SINGLE else 1.4
-        exponent = 2 if self.color_code == SetColors.GREEN else exponent
+        exponent = 1.75 if self.color_code != SetColors.SINGLE else 1.30
+        exponent = 1.9 if self.color_code == SetColors.GREEN else exponent
         if self.gender_specific != None:
-            exponent *= 1.5
+            exponent *= 1.2
         house_count_temp = self.house_count if override_house_count is None else override_house_count
         raw_rent_cost = (self.purchase_cost * 0.2) * (house_count_temp + 1) ** exponent
         rounded_rent_cost = round(raw_rent_cost * 4) / 4
@@ -58,7 +58,7 @@ class Property(BoardSpace):
             if decision:
                 player.BuyProperty(self)
         else:
-            self.logger("Do nothing at property because this gender does not pay rent.")
+            self.logger.debug("Do nothing at property because this gender does not pay rent.")
         return
 
     def DetermineHouseCost(self) -> float:
