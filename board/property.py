@@ -44,14 +44,14 @@ class Property(BoardSpace):
         self.house_count = 0
         self.logger.debug(f"{self.name} has been Released!")
 
-    def Land(self, gm: GameManager, player: Player):
+    def Land(self, gm: GameManager, player: Player, sudden_death: bool = False):
         super().Land(gm, player)
         self.logger.debug(f"\tOwned by: {'nobody' if self.owner is None else self.owner.name}")
         if self.IsOwned() and self.owner != player and self.gender_specific != player.gender:
             rentCost = self.GetRentCost()
             self.logger.debug(f"\t{self.house_count} Houses: {rentCost:.2f} oz")
             player.Drink(rentCost)
-        elif self.owner == player:
+        elif self.owner == player or sudden_death:
             pass
         elif self.gender_specific == None or self.gender_specific == player.gender:
             decision = player.DecideToBuy(self)

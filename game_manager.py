@@ -1,5 +1,6 @@
 import random
 from typing import List
+from board.property import Property
 from board.question_master import QuestionMaster
 from game_board import GameBoard
 from keg_deck import KegDeck
@@ -25,6 +26,7 @@ class GameManager:
                 if player.lost_round == 0:
                     player.lost_round = i - 1
                 continue
+
             self.logger.debug(f"{player.name}:")
             self.logger.debug(f"\t{player.drink_tokens} drink tokens.")
             self.logger.debug(f"\t{player.alcohol_remaining:.2f} alcohol left.")
@@ -32,9 +34,7 @@ class GameManager:
                 f"\t{player.total_oz_drank:.2f} of {player.drinking_capacity:.2f} drinking capacity."
             )
             self.logger.debug(f"\t{len(player.owned_properties)} properties.")
-            self.logger.debug(
-                f"\t{sum([x.house_count for x in player.owned_properties])} houses."
-            )
+            self.logger.debug(f"\t{sum([x.house_count for x in player.owned_properties])} houses.")
 
             if player.in_jail:
                 self.logger.debug(f"{player.name} is in the DRUNK TANK!")
@@ -45,6 +45,21 @@ class GameManager:
                     player.total_turns_in_jail += 1
                     self.logger.debug("---")
                     continue
+
+            if len([x for x in self.players if not x.has_lost]) == 2:
+                self.logger.debug("Only two players left. Sudden Death.")
+                roll_outcome = player.Roll()
+                visited_spaces = self.board.move_player(roll_outcome, player)
+
+                landed_space = visited_spaces[-1]
+                if (
+                    isinstance(landed_space, Property)
+                    and landed_space.IsOwned()
+                    and landed_space.owner != player
+                ):
+                    landed_space.Land(self, player)
+
+                continue
 
             if player.is_question_master:
                 loser = random.choice(self.players)
